@@ -1,69 +1,121 @@
-# React + TypeScript + Vite
+# 📘 User Invite Autocomplete Component
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A modular email input with validation, chip display, and Docker support.
 
-Currently, two official plugins are available:
+---
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## ✨ Setup Instructions
 
-## Expanding the ESLint configuration
+1️⃣ **Install dependencies:**
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+```bash
+npm install
 
-```js
-export default tseslint.config([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+✅ This installs everything in your package.json, including React, Vite (or Create React App), and MUI.
 
-      // Remove tseslint.configs.recommended and replace with this
-      ...tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      ...tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      ...tseslint.configs.stylisticTypeChecked,
+If you haven’t yet added MUI, install it separately:
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+npm install @mui/material @mui/icons-material @emotion/react @emotion/styled
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+⸻
 
-export default tseslint.config([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+2️⃣ Start the development server:
+	•	For Vite:
+
+npm run dev
+
+The app will be available at:
+
+http://localhost:5173
+
+
+	•	For Create React App:
+
+npm start
+
+The app will be available at:
+
+http://localhost:3000
+
+
+
+⸻
+
+3️⃣ Run in Docker:
+
+docker-compose up --build
+
+✅ This will:
+	•	Build the production bundle
+	•	Serve it with Nginx
+	•	Expose it at:
+
+http://localhost:3000
+
+
+⸻
+
+💡 Assumptions & Design Decisions
+	•	The component uses MUI Autocomplete in freeSolo + multiple mode for flexible input.
+	•	Emails are deduplicated automatically.
+	•	Validation uses a simple regex:
+
+/^[^\s@]+@[^\s@]+\.[^\s@]+$/
+
+
+	•	The parent component manages the emails list to control submission and hidden chips.
+	•	Chips show tooltips with the full email when truncated.
+	•	Hidden chips are displayed in a dropdown when clicking the “+X” chip.
+
+⸻
+
+🛠️ Challenges & Solutions
+	•	TypeScript Type Issues:
+	•	Autocomplete produced string | never[] types.
+	•	✅ Solution: Explicitly cast values to string[].
+	•	Render Value Logic:
+	•	Relying solely on selected caused desync between state and UI.
+	•	✅ Solution: Kept emails passed as a prop to maintain clear state ownership.
+	•	Error Handling:
+	•	Needed user-friendly feedback for invalid input.
+	•	✅ Solution: Displayed error messages cleanly below the component.
+
+⸻
+
+🧩 Project Component Mapping
+
+Below is a quick guide to what each file does:
+
+File	Purpose
+UserInviteAutocomplete.tsx	Main parent component. Orchestrates all state, props, and renders the input, button, and popper.
+useEmailInvite.ts	A custom hook encapsulating all business logic: input state, validation, popper control, and error handling.
+InviteInput.tsx	Renders the MUI <Autocomplete> input with visible chips and the “+X” hidden count chip.
+InviteChip.tsx	A single email chip wrapped in a tooltip showing the full email if truncated.
+HiddenChipsPopper.tsx	Dropdown that appears when clicking “+X”, showing hidden chips and allowing removal.
+
+
+⸻
+
+✅ Quick Visual Flow
+
+UserInviteAutocomplete
+├── useEmailInvite (state & logic)
+├── InviteInput
+│     └── InviteChip
+└── HiddenChipsPopper
+      └── InviteChip
+
+
+⸻
+
+✅ How to Customize
+	•	Change max visible chips:
+Adjust the maxVisibleChips prop in UserInviteAutocomplete.tsx.
+	•	Update validation logic:
+Edit the regex in useEmailInvite.ts.
+	•	Styling:
+All layout uses MUI <Box> and sx props for easy overrides.
+
+
 ```
