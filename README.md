@@ -1,86 +1,68 @@
-Absolutely—let’s do this properly.
 
-I’ll give you a professional-grade README that’s:
-✅ Clear
-✅ Structured
-✅ Concise but complete
-✅ Easy to read in GitHub
 
-Below is one polished block you can copy-paste, including:
-• A friendly intro
-• Setup (no ambiguity)
-• Usage examples
-• Component mapping
-• Customization tips
-• Challenges & solutions
 
-⸻
-
-📘 User Invite Autocomplete Component
+# 📘 User Invite Autocomplete Component
 
 A modular, production-ready email input with validation, tooltips, hidden chip handling, and Docker support.
 
-⸻
+---
 
-✨ Quick Start
+## ✨ Quick Start
 
-🟢 Install dependencies
+### 🔹 Install dependencies
 
+```bash
 npm install
 
-If your project doesn’t already have MUI installed, also run:
-
-npm install @mui/material @mui/icons-material @emotion/react @emotion/styled
 
 ⸻
 
-🟢 Start the development server
-• Vite:
+🔹 Start the development server
 
 npm run dev
 
-Runs locally at http://localhost:5173
+Runs locally at:
 
-    •	Create React App:
+http://localhost:5173
 
-npm start
-
-Runs locally at http://localhost:3000
 
 ⸻
 
-🟢 Build and run in Docker
+🔹 Build and run in Docker
 
 docker-compose up --build
 
-This:
+This will:
+	•	Build the production bundle
+	•	Serve it via Nginx
+	•	Expose it at:
 
-✅ Builds the production bundle
-✅ Serves it via Nginx
-✅ Exposes it at http://localhost:3000
+http://localhost:3000
+
 
 ⸻
 
 🧩 Project Overview
 
 This component lets users input and manage multiple emails, with:
-
-✅ Inline chips for the first few emails
-✅ A “+X” chip showing how many are hidden
-✅ A popper dropdown for hidden emails
-✅ Tooltips on chips to display full email addresses
-✅ Validation of email syntax
+	•	Inline chips for the first few emails
+	•	A “+X” chip showing how many are hidden
+	•	A popper dropdown for hidden emails
+	•	Tooltips showing the full email address
+	•	Validation of email syntax
+	•	Clean error messages
 
 ⸻
 
 🛠 File Structure and Responsibilities
 
-File Purpose
-UserInviteAutocomplete.tsx The main component orchestrating state, handlers, and layout.
-useEmailInvite.ts Custom hook encapsulating all logic: state, validation, error handling, and popper control.
-InviteInput.tsx MUI <Autocomplete> input showing visible chips and “+X” chip for hidden ones.
-InviteChip.tsx Single chip with tooltip, used in both visible area and popper.
-HiddenChipsPopper.tsx Dropdown showing hidden chips with remove actions.
+File	Purpose
+UserInviteAutocomplete.tsx	Main component orchestrating state, handlers, and layout.
+useEmailInvite.ts	Custom hook encapsulating all logic: state, validation, error handling, and popper control.
+InviteInput.tsx	Renders the Autocomplete input with visible chips and the “+X” hidden count chip.
+InviteChip.tsx	Single chip with tooltip, used in both visible area and popper.
+HiddenChipsPopper.tsx	Dropdown showing hidden chips with remove actions.
+
 
 ⸻
 
@@ -89,49 +71,53 @@ HiddenChipsPopper.tsx Dropdown showing hidden chips with remove actions.
 UserInviteAutocomplete
 ├── useEmailInvite
 ├── InviteInput
-│ └── InviteChip
+│     └── InviteChip
 └── HiddenChipsPopper
-└── InviteChip
+      └── InviteChip
+
 
 ⸻
 
 💡 Design Decisions
-• Validation Regex:
-Simple pattern for email addresses:
+	•	Validation Regex:
+A simple pattern to validate emails:
+
 /^[^\s@]+@[^\s@]+\.[^\s@]+$/
-• Parent-managed state:
+
+
+	•	Parent-managed state:
 The emails array is stored in the parent to keep submission and display logic centralized.
-• MUI Autocomplete in freeSolo mode:
-Enables typing any email and confirming with Enter.
-• Tooltips and truncation:
-Long emails show as ellipsis with a tooltip on hover.
-• Popper for hidden chips:
-Clean UI when there are many emails, instead of wrapping onto multiple lines.
+	•	Autocomplete freeSolo mode:
+Allows typing any email and confirming with Enter.
+	•	Tooltips and truncation:
+Long emails are truncated and show a tooltip on hover.
+	•	Popper for hidden chips:
+Keeps the UI clean when many emails are entered.
 
 ⸻
 
-🛠 Challenges and How We Solved Them
-• TypeScript Types:
-MUI Autocomplete with freeSolo + multiple produced string | never[] issues.
-✅ Solution: Explicit casting to string[].
-• Render Value Desync:
-Using only selected in renderValue caused hidden chips to desync from parent state.
-✅ Solution: Passed emails prop to keep state consistent.
-• Error Handling:
-Validation errors needed clear feedback without cluttering input.
-✅ Solution: Error message rendered below the field.
+🛠 Challenges and Solutions
+	•	TypeScript Types:
+Autocomplete produced string | never[] types.
+✅ Solution: Explicitly cast values to string[].
+	•	Render Value Desync:
+Using only selected caused hidden chips to desync from parent state.
+✅ Solution: Passed emails as a prop to maintain consistent state.
+	•	Error Handling:
+Needed clear validation feedback.
+✅ Solution: Showed error messages below the component.
 
 ⸻
 
 🎨 How to Customize
-• Max visible chips:
-Adjust the maxVisibleChips prop in UserInviteAutocomplete.tsx.
-• Validation logic:
+	•	Max visible chips:
+Change maxVisibleChips in UserInviteAutocomplete.tsx.
+	•	Validation logic:
 Update the regex in useEmailInvite.ts.
-• Styling:
-All layouts use MUI <Box> and sx props—override styles as needed.
-• Submission handling:
-Replace the console.log() in the Add Users button with your API call.
+	•	Styling:
+All layout uses MUI <Box> and sx props—override as needed.
+	•	Submission handling:
+Replace console.log() in the Add Users button with your API call.
 
 ⸻
 
@@ -142,7 +128,6 @@ Import and use in your app:
 import { UserInviteAutocomplete } from "./components/userInviteAutocomplete/UserInviteAutocomplete";
 
 export default function App() {
-return <UserInviteAutocomplete />;
+  return <UserInviteAutocomplete />;
 }
-
 
